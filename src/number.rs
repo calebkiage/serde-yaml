@@ -13,9 +13,6 @@ pub struct Number {
     n: N,
 }
 
-// "N" is a prefix of "NegInt"... this is a false positive.
-// https://github.com/Manishearth/rust-clippy/issues/1241
-#[allow(clippy::enum_variant_names)]
 #[derive(Copy, Clone)]
 enum N {
     PosInt(u64),
@@ -55,7 +52,7 @@ impl Number {
     #[allow(clippy::cast_sign_loss)]
     pub fn is_i64(&self) -> bool {
         match self.n {
-            N::PosInt(v) => v <= i64::max_value() as u64,
+            N::PosInt(v) => v <= i64::MAX as u64,
             N::NegInt(_) => true,
             N::Float(_) => false,
         }
@@ -146,7 +143,7 @@ impl Number {
     pub fn as_i64(&self) -> Option<i64> {
         match self.n {
             N::PosInt(n) => {
-                if n <= i64::max_value() as u64 {
+                if n <= i64::MAX as u64 {
                     Some(n as i64)
                 } else {
                     None
